@@ -1,47 +1,58 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cuidar+ Mini | Sistema de Saúde</title>
+<title>Cuidar+ v9.0 | Sistema Unificado de Saúde</title>
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 <style>
 
-*{
-box-sizing:border-box;
-font-family:Arial, sans-serif;
+
+:root{
+
+--primary:#2563eb;
+--primary-dark:#1d4ed8;
+
+--bg:#0f172a;
+--card:#1e293b;
+--input:#334155;
+
+--text:#f8fafc;
+--muted:#94a3b8;
+
+--doctor:#06b6d4;
+--admin:#a855f7;
+--success:#10b981;
+--danger:#ef4444;
+
 }
+
+
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Arial,sans-serif;
+
+}
+
+
 
 body{
-margin:0;
-background:#0f172a;
-color:white;
-}
 
-
-button{
-background:#2563eb;
-color:white;
-border:0;
-padding:12px;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-
-input,select{
-
-width:100%;
-padding:12px;
-margin:8px 0;
-border-radius:8px;
-border:1px solid #475569;
-background:#1e293b;
-color:white;
+background:var(--bg);
+color:var(--text);
 
 }
 
@@ -50,23 +61,32 @@ color:white;
 /* LOGIN */
 
 
-#login{
+#auth{
 
 height:100vh;
+
 display:flex;
-align-items:center;
+
 justify-content:center;
+
+align-items:center;
 
 }
 
 
-.login-box{
 
-width:360px;
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-box-shadow:0 20px 50px #000;
+.auth-box{
+
+width:420px;
+
+background:var(--card);
+
+padding:35px;
+
+border-radius:25px;
+
+box-shadow:
+0 25px 60px rgba(0,0,0,.5);
 
 }
 
@@ -75,17 +95,71 @@ box-shadow:0 20px 50px #000;
 .logo{
 
 text-align:center;
-font-size:32px;
+
+font-size:40px;
+
+font-weight:800;
+
 color:#38bdf8;
+
+margin-bottom:25px;
 
 }
 
 
 
-/* SISTEMA */
+input,select{
+
+width:100%;
+
+padding:14px;
+
+margin:8px 0 15px;
+
+border-radius:10px;
+
+border:1px solid #475569;
+
+background:var(--input);
+
+color:white;
+
+}
 
 
-#app{
+
+button{
+
+padding:13px;
+
+border:0;
+
+border-radius:10px;
+
+background:var(--primary);
+
+color:white;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+background:var(--primary-dark);
+
+}
+
+
+
+/* APP */
+
+
+#system{
 
 display:none;
 
@@ -93,29 +167,20 @@ display:none;
 
 
 
-header{
-
-height:70px;
-background:#1e293b;
-padding:20px;
-
-display:flex;
-justify-content:space-between;
-
-margin-left:220px;
-
-}
+/* SIDEBAR */
 
 
-
-aside{
+.sidebar{
 
 position:fixed;
-top:0;
+
 left:0;
 
+top:0;
+
 height:100vh;
-width:220px;
+
+width:260px;
 
 background:#020617;
 
@@ -125,9 +190,11 @@ padding:20px;
 
 
 
-aside h2{
+.sidebar h2{
 
 color:#38bdf8;
+
+margin-bottom:30px;
 
 }
 
@@ -135,20 +202,79 @@ color:#38bdf8;
 
 .menu{
 
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
 width:100%;
-margin:8px 0;
+
+background:none;
+
+margin-bottom:10px;
+
+text-align:left;
 
 }
 
 
 
-main{
+.menu:hover{
 
-margin-left:220px;
-
-padding:25px;
+background:#1e293b;
 
 }
+
+
+
+.admin{
+
+color:#c084fc;
+
+}
+
+
+
+.doctor{
+
+color:#22d3ee;
+
+}
+
+
+
+
+
+/* CONTEUDO */
+
+
+.content{
+
+margin-left:260px;
+
+padding:30px;
+
+}
+
+
+
+header{
+
+background:var(--card);
+
+padding:20px;
+
+border-radius:20px;
+
+display:flex;
+
+justify-content:space-between;
+
+margin-bottom:25px;
+
+}
+
 
 
 
@@ -167,20 +293,57 @@ display:block;
 
 
 
-/* CARDS */
-
 
 .card{
 
-background:#1e293b;
+background:var(--card);
+
+padding:25px;
+
+border-radius:20px;
+
+margin-bottom:20px;
+
+}
+
+
+
+
+
+/* DASHBOARD */
+
+
+.grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(200px,1fr));
+
+gap:20px;
+
+}
+
+
+
+.box{
+
+background:#334155;
 
 padding:20px;
 
 border-radius:15px;
 
-margin-bottom:20px;
+}
+
+
+
+.box h3{
+
+font-size:30px;
 
 }
+
 
 
 
@@ -189,35 +352,35 @@ margin-bottom:20px;
 
 .chat{
 
-height:350px;
+height:420px;
 
 background:#020617;
 
-padding:15px;
-
 border-radius:15px;
 
-overflow:auto;
+padding:15px;
+
+overflow-y:auto;
 
 }
 
 
 
-.msg{
-
-padding:12px;
-
-margin:10px;
-
-border-radius:12px;
+.message{
 
 max-width:75%;
 
+padding:12px;
+
+border-radius:15px;
+
+margin:10px;
+
 }
 
 
 
-.me{
+.mine{
 
 background:#2563eb;
 
@@ -227,7 +390,7 @@ margin-left:auto;
 
 
 
-.other{
+.theirs{
 
 background:#334155;
 
@@ -235,42 +398,122 @@ background:#334155;
 
 
 
-/* RESPONSIVO */
 
 
-@media(max-width:700px){
+/* TABLE */
 
 
-aside{
+table{
 
-width:70px;
+width:100%;
 
-}
-
-
-aside h2{
-
-display:none;
+border-collapse:collapse;
 
 }
 
 
-header,main{
 
-margin-left:70px;
+th,td{
+
+padding:12px;
+
+border-bottom:1px solid #475569;
+
+text-align:left;
 
 }
 
 
-.menu{
+
+
+.badge{
+
+padding:5px 10px;
+
+border-radius:20px;
 
 font-size:12px;
 
 }
 
 
+
+.badge-user{
+
+background:#10b981;
+
 }
 
+
+
+.badge-doctor{
+
+background:#06b6d4;
+
+}
+
+
+
+.badge-admin{
+
+background:#a855f7;
+
+}
+
+
+
+
+.toast{
+
+position:fixed;
+
+bottom:30px;
+
+right:30px;
+
+background:#38bdf8;
+
+color:#020617;
+
+padding:15px 25px;
+
+border-radius:10px;
+
+display:none;
+
+font-weight:bold;
+
+}
+
+
+
+
+@media(max-width:800px){
+
+
+.sidebar{
+
+width:80px;
+
+}
+
+
+.sidebar span{
+
+display:none;
+
+}
+
+
+.content{
+
+margin-left:80px;
+
+}
+
+
+
+}
 
 
 </style>
@@ -281,41 +524,45 @@ font-size:12px;
 <body>
 
 
+<div id="toast"></div>
+
 
 <!-- LOGIN -->
 
-<div id="login">
+
+<div id="auth">
 
 
-<div class="login-box">
+<div class="auth-box">
 
 
-<h1 class="logo">
+<div class="logo">
+
 🩺 Cuidar+
-</h1>
+
+</div>
 
 
-<input 
-id="email"
+
+<input id="email"
 placeholder="Email">
 
 
-<input
-id="senha"
+<input id="password"
 type="password"
 placeholder="Senha">
 
 
 
-<select id="perfil">
+<select id="role">
 
 
-<option value="paciente">
+<option value="user">
 Paciente
 </option>
 
 
-<option value="medico">
+<option value="doctor">
 Médico
 </option>
 
@@ -329,7 +576,7 @@ Administrador
 
 
 
-<button onclick="entrar()">
+<button onclick="Auth.login()">
 
 Entrar
 
@@ -337,99 +584,89 @@ Entrar
 
 
 
-<hr>
-
-
-<p>
-
-Usuários teste:
-
-<br><br>
-
-Paciente:
-<br>
-paciente@test.com
-<br>
-123
-
-
-<br><br>
-
-
-Médico:
-<br>
-medico@test.com
-<br>
-123
-
-
-</p>
-
+</div>
 
 </div>
 
 
-</div>
+<!-- CONTINUA NA PARTE 2 -->
+    <!-- SISTEMA PRINCIPAL -->
+
+<div id="system">
 
 
-
-
-
-<!-- SISTEMA -->
-
-<div id="app">
-
-
-
-<aside>
+<aside class="sidebar">
 
 
 <h2>
-Cuidar+
+🩺 Cuidar+
 </h2>
 
 
 
-<button class="menu"
-onclick="abrir('home')">
+<button class="menu" onclick="Router.go('dashboard')">
 
-🏠 Dashboard
-
-</button>
-
-
-
-<button class="menu"
-onclick="abrir('agenda')">
-
-📅 Agenda
+<i class="fa fa-home"></i>
+<span>Dashboard</span>
 
 </button>
 
 
 
-<button class="menu"
-onclick="abrir('ia')">
+<button class="menu" onclick="Router.go('agenda')">
 
-🤖 IA Clínica
-
-</button>
-
-
-
-<button class="menu"
-onclick="abrir('chat')">
-
-💬 Médico
+<i class="fa fa-calendar"></i>
+<span>Agenda</span>
 
 </button>
 
 
 
-<button class="menu"
-onclick="sair()">
+<button class="menu" onclick="Router.go('chat')">
 
-🚪 Sair
+<i class="fa fa-comments"></i>
+<span>Chat Médico</span>
+
+</button>
+
+
+
+<button class="menu" onclick="Router.go('ia')">
+
+<i class="fa fa-robot"></i>
+<span>IA Clínica</span>
+
+</button>
+
+
+
+<button class="menu doctor" id="doctorMenu"
+onclick="Router.go('doctor')">
+
+<i class="fa fa-user-doctor"></i>
+<span>Área Médica</span>
+
+</button>
+
+
+
+
+<button class="menu admin" id="adminMenu"
+onclick="Router.go('admin')">
+
+<i class="fa fa-shield"></i>
+<span>Administração</span>
+
+</button>
+
+
+
+
+<button class="menu"
+onclick="Auth.logout()">
+
+<i class="fa fa-power-off"></i>
+<span>Sair</span>
 
 </button>
 
@@ -439,17 +676,39 @@ onclick="sair()">
 
 
 
+
+<div class="content">
+
+
 <header>
 
 
-<h2 id="titulo">
+<h2 id="pageTitle">
 
 Dashboard
 
 </h2>
 
 
-<div id="usuario">
+<div>
+
+<b id="username">
+
+Usuário
+
+</b>
+
+
+<br>
+
+
+<span id="userBadge"
+class="badge badge-user">
+
+Paciente
+
+</span>
+
 
 </div>
 
@@ -459,15 +718,72 @@ Dashboard
 
 
 
-<main>
 
 
 
+<!-- DASHBOARD -->
 
 
-<section 
-id="home"
+<section id="dashboard"
 class="page active">
+
+
+<div class="grid">
+
+
+<div class="box">
+
+<h3 id="totalUsers">
+
+0
+
+</h3>
+
+<p>
+Usuários
+</p>
+
+</div>
+
+
+
+<div class="box">
+
+<h3 id="totalAppointments">
+
+0
+
+</h3>
+
+<p>
+Consultas
+</p>
+
+</div>
+
+
+
+<div class="box">
+
+<h3>
+
+98%
+
+</h3>
+
+<p>
+Eficiência
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+
 
 
 <div class="card">
@@ -475,38 +791,22 @@ class="page active">
 
 <h2>
 
-Painel
+📅 Meus compromissos
 
 </h2>
 
 
-<p>
 
-Sistema Cuidar+ ativo.
+<div id="myAppointments">
 
-</p>
-
+Nenhum registro.
 
 </div>
 
 
 
-<div class="card">
-
-
-<h3>
-
-Consultas
-
-</h3>
-
-
-<div id="consultas">
-
 </div>
 
-
-</div>
 
 
 </section>
@@ -517,8 +817,12 @@ Consultas
 
 
 
-<section 
-id="agenda"
+
+
+<!-- AGENDA -->
+
+
+<section id="agenda"
 class="page">
 
 
@@ -533,27 +837,27 @@ Novo agendamento
 
 
 
-<select id="especialidade">
+<label>
+Especialidade
+</label>
+
+
+
+<select id="specialty">
 
 
 <option>
-
-Clínico Geral
-
+Clínico Geral - Dr. Silva
 </option>
 
 
 <option>
-
-Cardiologia
-
+Cardiologia - Dr. Silva
 </option>
 
 
 <option>
-
-Pediatria
-
+Pediatria - Dr. Silva
 </option>
 
 
@@ -561,15 +865,34 @@ Pediatria
 
 
 
-<input
-type="date"
-id="data">
+
+<label>
+Data
+</label>
+
+
+<input type="date"
+id="date">
 
 
 
-<button onclick="agendar()">
 
-Confirmar
+
+<label>
+Horário
+</label>
+
+
+<input type="time"
+id="time">
+
+
+
+
+
+<button onclick="Schedule.create()">
+
+Confirmar consulta
 
 </button>
 
@@ -586,8 +909,11 @@ Confirmar
 
 
 
-<section 
-id="ia"
+
+<!-- CHAT MÉDICO -->
+
+
+<section id="chat"
 class="page">
 
 
@@ -596,39 +922,31 @@ class="page">
 
 <h2>
 
-Assistente IA
+💬 Comunicação Médico/Paciente
 
 </h2>
 
 
 
-<div id="chatIA"
+<div id="medicalChat"
 class="chat">
 
 
-<div class="msg other">
-
-Olá! Como posso ajudar?
-
-</div>
-
-
 </div>
 
 
 
-<input 
-id="pergunta"
-placeholder="Digite sintomas">
+<input
+id="chatMessage"
+placeholder="Digite sua mensagem">
 
 
 
-<button onclick="iaEnviar()">
+<button onclick="Chat.send()">
 
 Enviar
 
 </button>
-
 
 
 </div>
@@ -643,8 +961,10 @@ Enviar
 
 
 
-<section 
-id="chat"
+<!-- IA -->
+
+
+<section id="ia"
 class="page">
 
 
@@ -653,29 +973,38 @@ class="page">
 
 <h2>
 
-Chat Médico
+🤖 IA Clinical 2.0
 
 </h2>
 
 
-<div id="chatMedico"
+
+<div id="aiMessages"
 class="chat">
+
+
+<div class="message theirs">
+
+Olá. Descreva seus sintomas.
+
+</div>
+
 
 </div>
 
 
 
+
 <input
-id="mensagem"
-placeholder="Mensagem">
+id="aiInput"
+placeholder="Exemplo: estou com dor de cabeça">
 
 
-<button onclick="enviarMensagem()">
+<button onclick="IA.ask()">
 
-Enviar
+Analisar
 
 </button>
-
 
 
 </div>
@@ -686,201 +1015,517 @@ Enviar
 
 
 
-</main>
 
+
+
+
+
+<!-- ÁREA MÉDICA -->
+
+
+<section id="doctor"
+class="page">
+
+
+<div class="card">
+
+
+<h2 style="color:#22d3ee">
+
+👨‍⚕️ Agenda Médica
+
+</h2>
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Paciente
+</th>
+
+<th>
+Especialidade
+</th>
+
+<th>
+Data
+</th>
+
+<th>
+Hora
+</th>
+
+<th>
+Status
+</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody id="doctorTable">
+
+
+</tbody>
+
+
+
+</table>
 
 
 </div>
 
 
-
-<!-- COLE O JAVASCRIPT AQUI -->
-const usuarios = [
-    {
-        email:"paciente@test.com",
-        senha:"123",
-        nome:"João Paciente",
-        perfil:"paciente"
-    },
-    {
-        email:"medico@test.com",
-        senha:"123",
-        nome:"Dr. Silva",
-        perfil:"medico"
-    },
-    {
-        email:"admin@test.com",
-        senha:"123",
-        nome:"Administrador",
-        perfil:"admin"
-    }
-];
+</section>
 
 
-let usuarioAtual = null;
 
 
-// =======================
-// BANCO LOCAL
-// =======================
 
-function banco(nome, valor=null){
 
-    if(valor !== null){
 
-        localStorage.setItem(
-            nome,
-            JSON.stringify(valor)
-        );
 
-    }
 
-    return JSON.parse(
-        localStorage.getItem(nome)
-    ) || [];
+<!-- ADMIN -->
+
+
+<section id="admin"
+class="page">
+
+
+<div class="card">
+
+
+<h2 style="color:#c084fc">
+
+🛡 Gestão Administrativa
+
+</h2>
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Nome
+</th>
+
+
+<th>
+Email
+</th>
+
+
+<th>
+Perfil
+</th>
+
+
+</tr>
+
+</thead>
+
+
+
+<tbody id="usersTable">
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+
+</div>
+
+</div>
+
+
+
+<!-- PARTE 3 ENTRA AQUI -->
+<script>
+
+
+/* ==========================
+   BANCO LOCAL
+========================== */
+
+
+const DB = {
+
+
+get(chave){
+
+return JSON.parse(
+localStorage.getItem(chave)
+) || [];
+
+},
+
+
+set(chave,valor){
+
+localStorage.setItem(
+chave,
+JSON.stringify(valor)
+);
+
+}
+
+
+};
+
+
+
+
+/* ==========================
+   DADOS INICIAIS
+========================== */
+
+
+if(!localStorage.getItem("users")){
+
+
+DB.set("users",[
+
+
+{
+nome:"Administrador",
+email:"admin@cuidar.com",
+senha:"123",
+perfil:"admin"
+},
+
+
+
+{
+nome:"Dr. Silva",
+email:"medico@cuidar.com",
+senha:"123",
+perfil:"doctor"
+},
+
+
+
+{
+nome:"Paciente Teste",
+email:"paciente@cuidar.com",
+senha:"123",
+perfil:"user"
+}
+
+
+]);
+
 
 }
 
 
 
-if(!localStorage.getItem("consultas"))
-    banco("consultas",[]);
 
+if(!localStorage.getItem("appointments")){
 
-if(!localStorage.getItem("mensagens"))
-    banco("mensagens",[]);
-
-
-
-// =======================
-// LOGIN
-// =======================
-
-function entrar(){
-
-    let email =
-    document.getElementById("email").value;
-
-
-    let senha =
-    document.getElementById("senha").value;
-
-
-    let perfil =
-    document.getElementById("perfil").value;
-
-
-
-    let user = usuarios.find(u=>
-
-        u.email === email &&
-        u.senha === senha &&
-        u.perfil === perfil
-
-    );
-
-
-
-    if(!user){
-
-        alert("Usuário ou senha inválidos");
-
-        return;
-
-    }
-
-
-    usuarioAtual=user;
-
-
-
-    document.getElementById("login")
-    .style.display="none";
-
-
-    document.getElementById("app")
-    .style.display="block";
-
-
-
-    document.getElementById("usuario")
-    .innerHTML=
-    user.nome;
-
-
-
-    carregarConsultas();
-
-    carregarMensagens();
-
+DB.set(
+"appointments",
+[]
+);
 
 }
 
 
 
-// =======================
-// MENU
-// =======================
+if(!localStorage.getItem("messages")){
 
-function abrir(pagina){
+DB.set(
+"messages",
+[]
+);
+
+}
+
+
+
+
+/* ==========================
+   USUÁRIO ATUAL
+========================== */
+
+
+let CurrentUser=null;
+
+
+
+
+
+/* ==========================
+   AUTENTICAÇÃO
+========================== */
+
+
+const Auth={
+
+
+
+login(){
+
+
+let email=
+document.getElementById("email").value;
+
+
+
+let senha=
+document.getElementById("password").value;
+
+
+
+let perfil=
+document.getElementById("role").value;
+
+
+
+let users=
+DB.get("users");
+
+
+
+let user=
+users.find(u=>
+
+u.email===email &&
+
+u.senha===senha &&
+
+u.perfil===perfil
+
+);
+
+
+
+
+if(!user){
+
+UI.toast(
+"Login inválido"
+);
+
+return;
+
+}
+
+
+
+
+CurrentUser=user;
+
+
+
+document
+.getElementById("auth")
+.style.display="none";
+
+
+
+document
+.getElementById("system")
+.style.display="block";
+
+
+
+
+
+document
+.getElementById("username")
+.innerText=user.nome;
+
+
+
+
+let badge=
+document.getElementById("userBadge");
+
+
+
+badge.innerText=
+user.perfil==="doctor"
+?
+"Médico"
+:
+user.perfil==="admin"
+?
+"Administrador"
+:
+"Paciente";
+
+
+
+
+badge.className=
+"badge badge-"+user.perfil;
+
+
+
+
+// permissões
+
+
+document
+.getElementById("doctorMenu")
+.style.display=
+user.perfil==="doctor"
+?
+"flex"
+:
+"none";
+
+
+
+document
+.getElementById("adminMenu")
+.style.display=
+user.perfil==="admin"
+?
+"flex"
+:
+"none";
+
+
+
+
+
+Router.go("dashboard");
+
+UI.refresh();
+
+
+},
+
+
+
+
+logout(){
+
+
+CurrentUser=null;
+
+
+
+document
+.getElementById("system")
+.style.display="none";
+
+
+
+document
+.getElementById("auth")
+.style.display="flex";
+
+
+
+}
+
+};
+
+
+
+
+
+
+
+/* ==========================
+   ROTAS
+========================== */
+
+
+const Router={
+
+
+go(page){
+
 
 
 document
 .querySelectorAll(".page")
 .forEach(p=>
+
 p.classList.remove("active")
+
 );
 
 
 
-document
-.getElementById(pagina)
-.classList.add("active");
+let destino=
+document.getElementById(page);
 
 
+
+if(destino){
+
+destino.classList.add("active");
+
+}
+
+
+
 document
-.getElementById("titulo")
+.getElementById("pageTitle")
 .innerText=
-pagina.toUpperCase();
+page.toUpperCase();
+
+
+
+UI.refresh();
 
 
 
 }
 
 
-
-// =======================
-// LOGOUT
-// =======================
-
-function sair(){
-
-usuarioAtual=null;
-
-
-document.getElementById("app")
-.style.display="none";
-
-
-document.getElementById("login")
-.style.display="flex";
-
-
-}
+};
 
 
 
-// =======================
-// CONSULTAS
-// =======================
 
 
-function agendar(){
 
 
-if(usuarioAtual.perfil!=="paciente"){
+/* ==========================
+   AGENDA
+========================== */
 
-alert("Somente pacientes podem agendar");
+
+const Schedule={
+
+
+create(){
+
+
+
+if(CurrentUser.perfil!=="user"){
+
+UI.toast(
+"Somente pacientes agendam"
+);
 
 return;
 
@@ -888,108 +1533,184 @@ return;
 
 
 
-let data=
-document.getElementById("data").value;
 
-
-let especialidade=
-document.getElementById("especialidade").value;
+let lista=
+DB.get("appointments");
 
 
 
-if(!data){
 
-alert("Selecione uma data");
+let novo={
 
-return;
-
-}
-
-
-
-let consultas=banco("consultas");
-
-
-
-consultas.push({
 
 id:Date.now(),
 
-paciente:usuarioAtual.nome,
-
-emailPaciente:usuarioAtual.email,
-
-medico:"Dr. Silva",
-
-especialidade,
-
-data,
-
-status:"Agendada"
-
-});
+paciente:
+CurrentUser.nome,
 
 
+email:
+CurrentUser.email,
 
-banco(
-"consultas",
-consultas
+
+medico:
+"Dr. Silva",
+
+
+especialidade:
+document.getElementById("specialty").value,
+
+
+data:
+document.getElementById("date").value,
+
+
+hora:
+document.getElementById("time").value,
+
+
+status:
+"Agendada"
+
+
+};
+
+
+
+
+
+if(!novo.data || !novo.hora){
+
+UI.toast(
+"Preencha data e horário"
 );
 
-
-
-alert("Consulta criada");
-
-
-carregarConsultas();
-
+return;
 
 }
 
 
 
 
-function carregarConsultas(){
 
-
-let area =
-document.getElementById("consultas");
-
-
-if(!area)return;
+lista.push(novo);
 
 
 
-let consultas=banco("consultas");
-
-
-
-let lista;
-
-
-
-if(usuarioAtual.perfil==="medico"){
-
-lista=consultas.filter(c=>
-
-c.medico==="Dr. Silva"
-
+DB.set(
+"appointments",
+lista
 );
+
+
+
+UI.toast(
+"Consulta criada"
+);
+
+
+
+UI.refresh();
 
 
 }
 
-else{
+
+};
 
 
-lista=consultas.filter(c=>
 
-c.emailPaciente===usuarioAtual.email
 
+
+
+
+/* ==========================
+   INTERFACE
+========================== */
+
+
+const UI={
+
+
+
+toast(text){
+
+
+let t=
+document.getElementById("toast");
+
+t.innerText=text;
+
+t.style.display="block";
+
+
+setTimeout(()=>{
+
+t.style.display="none";
+
+},3000);
+
+
+},
+
+
+
+
+
+refresh(){
+
+
+if(!CurrentUser)
+return;
+
+
+
+let users=
+DB.get("users");
+
+
+let appointments=
+DB.get("appointments");
+
+
+
+
+document
+.getElementById("totalUsers")
+.innerText=
+users.length;
+
+
+
+
+document
+.getElementById("totalAppointments")
+.innerText=
+appointments.length;
+
+
+
+
+
+// consultas paciente
+
+
+let area=
+document.getElementById(
+"myAppointments"
 );
 
 
-}
+
+if(area){
+
+
+let lista=
+appointments.filter(a=>
+
+a.email===CurrentUser.email
+
+);
 
 
 
@@ -997,43 +1718,85 @@ area.innerHTML="";
 
 
 
-if(lista.length===0){
-
-area.innerHTML="Nenhuma consulta encontrada";
-
-return;
-
-}
-
-
-
-lista.forEach(c=>{
+lista.forEach(a=>{
 
 
 area.innerHTML+=`
 
 <div class="card">
 
-<b>${c.especialidade}</b>
+<b>${a.especialidade}</b>
 
 <br>
 
-Paciente:
-${c.paciente}
+${a.data}
+
+às
+
+${a.hora}
 
 <br>
 
-Data:
-${c.data}
-
-<br>
-
-Status:
-${c.status}
+${a.status}
 
 </div>
 
+
 `;
+
+
+});
+
+
+if(lista.length===0)
+
+area.innerHTML=
+"Nenhuma consulta";
+
+}
+
+
+
+
+
+// médico
+
+
+let tabela=
+document.getElementById(
+"doctorTable"
+);
+
+
+
+if(tabela){
+
+
+tabela.innerHTML="";
+
+
+
+appointments.forEach(a=>{
+
+
+tabela.innerHTML+=`
+
+<tr>
+
+<td>${a.paciente}</td>
+
+<td>${a.especialidade}</td>
+
+<td>${a.data}</td>
+
+<td>${a.hora}</td>
+
+<td>${a.status}</td>
+
+</tr>
+
+`;
+
 
 });
 
@@ -1043,131 +1806,86 @@ ${c.status}
 
 
 
-// =======================
-// IA CLÍNICA
-// =======================
+
+// admin
 
 
-function iaEnviar(){
-
-
-let campo =
-document.getElementById("pergunta");
-
-
-let texto =
-campo.value;
-
-
-if(!texto)return;
+let tabelaUsers=
+document.getElementById(
+"usersTable"
+);
 
 
 
-let chat =
-document.getElementById("chatIA");
+if(tabelaUsers){
+
+
+tabelaUsers.innerHTML="";
 
 
 
-chat.innerHTML+=`
-
-<div class="msg me">
-
-${texto}
-
-</div>
-
-`;
+users.forEach(u=>{
 
 
+tabelaUsers.innerHTML+=`
 
-let resposta =
-"Procure avaliação médica se os sintomas persistirem.";
+<tr>
 
+<td>${u.nome}</td>
 
+<td>${u.email}</td>
 
-let t =
-texto.toLowerCase();
+<td>${u.perfil}</td>
 
-
-
-if(t.includes("dor")){
-
-resposta=
-"Qual a localização e intensidade da dor?";
-
-}
-
-
-if(t.includes("febre")){
-
-resposta=
-"Informe a temperatura e há quanto tempo iniciou.";
-
-}
-
-
-if(t.includes("falta de ar")){
-
-resposta=
-"Falta de ar pode ser urgente. Procure atendimento.";
-
-}
-
-
-
-
-setTimeout(()=>{
-
-
-chat.innerHTML+=`
-
-<div class="msg other">
-
-${resposta}
-
-</div>
+</tr>
 
 `;
 
 
-chat.scrollTop=
-chat.scrollHeight;
-
-
-
-},600);
-
-
-
-campo.value="";
+});
 
 
 }
 
 
 
-// =======================
-// CHAT MÉDICO
-// =======================
-
-
-function enviarMensagem(){
+}
 
 
 
-let texto =
-document
-.getElementById("mensagem")
-.value;
+};
+
+
+<script>
+
+
+/* ==========================
+   CHAT MÉDICO / PACIENTE
+========================== */
+
+
+const Chat={
+
+
+send(){
+
+
+let campo=
+document.getElementById("chatMessage");
+
+
+let texto=
+campo.value.trim();
 
 
 
-if(!texto)return;
+if(!texto)
+return;
 
 
 
 let mensagens=
-banco("mensagens");
+DB.get("messages");
 
 
 
@@ -1175,69 +1893,58 @@ mensagens.push({
 
 id:Date.now(),
 
-remetente:
-usuarioAtual.nome,
-
+autor:
+CurrentUser.nome,
 
 perfil:
-usuarioAtual.perfil,
+CurrentUser.perfil,
 
-
-texto,
-
+texto:texto,
 
 hora:
 new Date()
 .toLocaleTimeString(),
 
-
-destino:
-
-usuarioAtual.perfil==="paciente"
-?
-"Dr. Silva"
-:
-"João Paciente"
-
-
 });
 
 
 
-banco(
-"mensagens",
+DB.set(
+"messages",
 mensagens
 );
 
 
 
-document
-.getElementById("mensagem")
-.value="";
+campo.value="";
 
 
-carregarMensagens();
+Chat.load();
 
 
-}
-
+},
 
 
 
-function carregarMensagens(){
 
+
+load(){
 
 
 let area=
-document.getElementById("chatMedico");
+document.getElementById(
+"medicalChat"
+);
 
 
-if(!area)return;
+
+if(!area)
+return;
 
 
 
 let mensagens=
-banco("mensagens");
+DB.get("messages");
 
 
 
@@ -1245,39 +1952,24 @@ area.innerHTML="";
 
 
 
-let conversa=
-mensagens.filter(m=>
-
-
-m.remetente===usuarioAtual.nome
-
-||
-
-m.destino===usuarioAtual.nome
-
-
-);
-
-
-
-conversa.forEach(m=>{
+mensagens.forEach(m=>{
 
 
 let classe=
-
-m.remetente===usuarioAtual.nome
+m.autor===CurrentUser.nome
 ?
-"me"
+"mine"
 :
-"other";
+"theirs";
 
 
 
 area.innerHTML+=`
 
-<div class="msg ${classe}">
+<div class="message ${classe}">
 
-<b>${m.remetente}</b>
+
+<b>${m.autor}</b>
 
 <br>
 
@@ -1286,12 +1978,16 @@ ${m.texto}
 <br>
 
 <small>
+
 ${m.hora}
+
 </small>
+
 
 </div>
 
 `;
+
 
 
 });
@@ -1305,25 +2001,193 @@ area.scrollHeight;
 }
 
 
+};
 
-// =======================
-// ATUALIZAÇÃO AUTOMÁTICA
-// =======================
+
+
+
+
+
+
+/* ==========================
+   IA CLÍNICA
+========================== */
+
+
+const IA={
+
+
+ask(){
+
+
+let input=
+document.getElementById(
+"aiInput"
+);
+
+
+
+let texto=
+input.value.trim();
+
+
+
+if(!texto)
+return;
+
+
+
+let chat=
+document.getElementById(
+"aiMessages"
+);
+
+
+
+chat.innerHTML+=`
+
+<div class="message mine">
+
+${texto}
+
+</div>
+
+`;
+
+
+
+input.value="";
+
+
+
+let resposta=
+"Recomendo acompanhamento médico para avaliação adequada.";
+
+
+
+let t=
+texto.toLowerCase();
+
+
+
+if(t.includes("dor")){
+
+
+resposta=
+"Entendi. Informe localização da dor, intensidade de 0 a 10 e duração.";
+
+
+}
+
+
+
+else if(t.includes("febre")){
+
+
+resposta=
+"Verifique a temperatura. Febre persistente deve ser avaliada por um profissional.";
+
+
+}
+
+
+
+else if(t.includes("tosse")){
+
+
+resposta=
+"Informe há quanto tempo começou e se existe falta de ar.";
+
+
+}
+
+
+
+setTimeout(()=>{
+
+
+chat.innerHTML+=`
+
+<div class="message theirs">
+
+🤖 ${resposta}
+
+</div>
+
+`;
+
+
+
+chat.scrollTop=
+chat.scrollHeight;
+
+
+},700);
+
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+
+/* ==========================
+   ATUALIZAÇÃO AUTOMÁTICA
+========================== */
 
 
 setInterval(()=>{
 
 
-if(usuarioAtual){
+if(CurrentUser){
 
-carregarMensagens();
 
-carregarConsultas();
+Chat.load();
+
+
+UI.refresh();
+
 
 }
 
 
+
 },3000);
+
+
+
+
+
+
+
+/* ==========================
+   INICIALIZAÇÃO
+========================== */
+
+
+window.onload=()=>{
+
+
+console.log(
+"Cuidar+ v9.0 iniciado"
+);
+
+
+};
+
+
+
+</script>
+
+
+
 </body>
 
 </html>
