@@ -11,11 +11,14 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 const db = new sqlite3.Database(
-  path.join(__dirname, "database.db")
+  path.join(__dirname, "database.db"),
+  err => {
+    if (err) console.error("Erro SQLite:", err.message);
+    else console.log("SQLite conectado.");
+  }
 );
 
 db.serialize(() => {
-
   db.run(`
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,87 +40,101 @@ db.serialize(() => {
     )
   `);
 
-  const usuarios = [
-    [
-      "Administrador",
-      "admin@cuidar.com",
-      "123",
-      "admin"
-    ],
-    [
-      "Dr. Silva",
-      "medico@cuidar.com",
-      "123",
-      "doctor"
-    ],
-    [
-      "Paciente Teste",
-      "paciente@cuidar.com",
-      "123",
-      "user"
-    ]
+  const users = [
+    ["Administrador", "admin@cuidar.com", "123", "admin"],
+    ["Dr. Silva", "medico@cuidar.com", "123", "doctor"],
+    ["Paciente Teste", "paciente@cuidar.com", "123", "user"]
   ];
 
   const stmt = db.prepare(`
     INSERT OR IGNORE INTO usuarios
-    (nome,email,senha,perfil)
-    VALUES (?,?,?,?)
+    (nome, email, senha, perfil)
+    VALUES (?, ?, ?, ?)
   `);
 
-  usuarios.forEach(u => stmt.run(u));
+  users.forEach(user => stmt.run(user));
 
   stmt.finalize();
 });
 
-app.post("/api/login", (req, res) => {
+/* =========================
+   LOGIN
+========================= */
 
+app.post("/api/login", (req, res) => {
   const { email, senha, perfil } = req.body;
 
+  if (!email || !senha || !perfil) {
+    return res.status(400).json({
+      error: "Preencha todos os campos."
+    });
+  }
+
   db.get(
-    `SELECT id,nome,email,perfil
-     FROM usuarios
-     WHERE email=? AND senha=? AND perfil=?`,
+    `
+    SELECT id, nome, email, perfil
+    FROM usuarios
+    WHERE email = ?
+    AND senha = ?
+    AND perfil = ?
+    `,
     [email, senha, perfil],
     (err, user) => {
+      if (err) {
+        console.error(err);
 
-      if (err)
         return res.status(500).json({
-          error: "Erro no banco"
+          error: "Erro interno no banco de dados."
         });
+      }
 
-      if (!user)
+      if (!user) {
         return res.status(401).json({
-          error: "Credenciais inválidas"
+          error: "E-mail, senha ou perfil inválido."
         });
+      }
 
       res.json(user);
     }
   );
 });
 
+/* =========================
+   CONSULTAS
+========================= */
+
 app.get("/api/consultas", (req, res) => {
+  const { email } = req.query;
 
-  const sql = req.query.email
-    ? "SELECT * FROM consultas WHERE email=? ORDER BY data,hora"
-    : "SELECT * FROM consultas ORDER BY data,hora";
+  const sql = email
+    ? `
+      SELECT *
+      FROM consultas
+      WHERE email = ?
+      ORDER BY data, hora
+    `
+    : `
+      SELECT *
+      FROM consultas
+      ORDER BY data, hora
+    `;
 
-  const params = req.query.email
-    ? [req.query.email]
-    : [];
+  const params = email ? [email] : [];
 
   db.all(sql, params, (err, rows) => {
+    if (err) {
+      console.error(err);
 
-    if (err)
       return res.status(500).json({
-        error: "Erro ao buscar consultas"
+        error: "Erro ao carregar consultas."
       });
+    }
 
     res.json(rows);
   });
 });
 
 app.post("/api/consultas", (req, res) => {
-
   const {
     paciente,
     email,
@@ -126,31 +143,45 @@ app.post("/api/consultas", (req, res) => {
     hora
   } = req.body;
 
-  if (!paciente || !email || !especialidade || !data || !hora)
+  if (
+    !paciente ||
+    !email ||
+    !especialidade ||
+    !data ||
+    !hora
+  ) {
     return res.status(400).json({
-      error: "Preencha todos os campos"
+      error: "Preencha todos os campos."
     });
+  }
 
   db.get(
-    `SELECT id FROM consultas
-     WHERE data=? AND hora=?`,
+    `
+    SELECT id
+    FROM consultas
+    WHERE data = ?
+    AND hora = ?
+    `,
     [data, hora],
-    (err, existente) => {
-
-      if (err)
+    (err, consulta) => {
+      if (err) {
         return res.status(500).json({
-          error: "Erro no banco"
+          error: "Erro ao verificar horário."
         });
+      }
 
-      if (existente)
+      if (consulta) {
         return res.status(409).json({
-          error: "Horário já ocupado"
+          error: "Esse horário já está ocupado."
         });
+      }
 
       db.run(
-        `INSERT INTO consultas
-        (paciente,email,especialidade,data,hora)
-        VALUES (?,?,?,?,?)`,
+        `
+        INSERT INTO consultas
+        (paciente, email, especialidade, data, hora)
+        VALUES (?, ?, ?, ?, ?)
+        `,
         [
           paciente,
           email,
@@ -158,15 +189,18 @@ app.post("/api/consultas", (req, res) => {
           data,
           hora
         ],
-        err => {
+        function (err) {
+          if (err) {
+            console.error(err);
 
-          if (err)
             return res.status(500).json({
-              error: "Não foi possível agendar"
+              error: "Erro ao criar consulta."
             });
+          }
 
-          res.json({
-            ok: true
+          res.status(201).json({
+            ok: true,
+            id: this.lastID
           });
         }
       );
@@ -174,51 +208,53 @@ app.post("/api/consultas", (req, res) => {
   );
 });
 
+/* =========================
+   USUÁRIOS
+========================= */
+
 app.get("/api/usuarios", (req, res) => {
-
   db.all(
-    `SELECT id,nome,email,perfil
-     FROM usuarios
-     ORDER BY nome`,
+    `
+    SELECT id, nome, email, perfil
+    FROM usuarios
+    ORDER BY nome
+    `,
     (err, rows) => {
-
-      if (err)
+      if (err) {
         return res.status(500).json({
-          error: "Erro ao buscar usuários"
+          error: "Erro ao carregar usuários."
         });
+      }
 
       res.json(rows);
     }
   );
 });
 
-app.post("/api/ia", async (req, res) => {
+/* =========================
+   IA
+========================= */
 
+app.post("/api/ia", async (req, res) => {
   const mensagem = String(
     req.body.mensagem || ""
   ).trim();
 
-  if (!mensagem)
+  if (!mensagem) {
     return res.status(400).json({
-      error: "Mensagem vazia"
+      error: "Mensagem vazia."
     });
-
-  /*
-   * A chave da IA fica no servidor.
-   * Nunca coloque OPENAI_API_KEY no app.js.
-   */
+  }
 
   if (!process.env.OPENAI_API_KEY) {
-
     return res.json({
       resposta:
-        "IA não configurada. Adicione OPENAI_API_KEY ao arquivo .env."
+        "A IA ainda não foi configurada. Adicione OPENAI_API_KEY ao arquivo .env."
     });
   }
 
   try {
-
-    const resposta = await fetch(
+    const response = await fetch(
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
@@ -230,36 +266,63 @@ app.post("/api/ia", async (req, res) => {
         },
 
         body: JSON.stringify({
-          model: process.env.AI_MODEL || "gpt-5",
+          model:
+            process.env.AI_MODEL || "gpt-5",
+
           instructions: `
-Você é o Cuidar+ IA Clinical.
+Você é a IA Clínica do Cuidar+.
 
-Seu objetivo é auxiliar o usuário com orientação
-de saúde de forma segura, clara e responsável.
+Responda sempre em português do Brasil.
 
-Regras:
-- Não invente diagnósticos.
-- Não prescreva medicamentos.
-- Não substitua um médico.
-- Faça perguntas relevantes quando faltarem informações.
-- Explique possibilidades sem afirmar diagnóstico.
-- Identifique sinais de emergência.
-- Se houver sinais graves, recomende procurar
-  atendimento de emergência imediatamente.
-- Seja objetivo.
-- Responda em português do Brasil.
+Sua função é fornecer orientação inicial
+de saúde de forma segura.
+
+NUNCA:
+- dê diagnóstico definitivo;
+- prescreva medicamentos;
+- indique doses;
+- substitua avaliação médica.
+
+Faça perguntas quando faltarem informações.
+
+Considere:
+idade aproximada;
+duração dos sintomas;
+intensidade;
+localização;
+sintomas associados;
+medicamentos já utilizados;
+condições relevantes.
+
+Se houver sinais potencialmente graves,
+oriente procurar atendimento médico urgente.
+
+Se houver possível emergência,
+oriente o usuário a procurar imediatamente
+um serviço de emergência.
+
+Se a situação parecer não urgente,
+explique possibilidades gerais e próximos passos.
+
+Seja claro, empático e objetivo.
           `,
+
           input: mensagem
         })
       }
     );
 
-    const data = await resposta.json();
+    const data = await response.json();
 
-    if (!resposta.ok)
-      throw new Error(
-        data.error?.message || "Erro na IA"
-      );
+    if (!response.ok) {
+      console.error(data);
+
+      return res.status(500).json({
+        error:
+          data.error?.message ||
+          "Erro na API de IA."
+      });
+    }
 
     res.json({
       resposta:
@@ -268,18 +331,44 @@ Regras:
     });
 
   } catch (error) {
-
-    console.error(error);
+    console.error("IA:", error);
 
     res.status(500).json({
-      error: "Falha na inteligência clínica"
+      error: "Erro de comunicação com a IA."
     });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(
-    `Cuidar+ rodando em http://localhost:${PORT}`
+/* =========================
+   ROTA PRINCIPAL
+========================= */
+
+app.get("/", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "index.html")
   );
 });
 
+/* =========================
+   404 JSON PARA API
+========================= */
+
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    error: "Endpoint não encontrado."
+  });
+});
+
+/* =========================
+   SERVIDOR
+========================= */
+
+app.listen(PORT, () => {
+  console.log(`
+╔══════════════════════════════╗
+║          CUIDAR+             ║
+║                              ║
+║  http://localhost:${PORT}      ║
+╚══════════════════════════════╝
+`);
+});
